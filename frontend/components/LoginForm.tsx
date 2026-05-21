@@ -10,6 +10,8 @@ export default function LoginForm() {
         password: ""
     });
 
+    const [message, setMessage] = useState("");
+
     const handleChange = (event: any) => {
 
         const { name, value } = event.target;
@@ -39,12 +41,12 @@ export default function LoginForm() {
             const data = await response.json();
 
             if (!response.ok) {
-                console.error(data.message);
+                setMessage(data.message)
                 return;
             }
 
-            console.log(data.message);
-            console.log(data.token);
+            setMessage(data.message);
+            localStorage.setItem("token", data.token);
 
         } catch (error) {
             console.error(error);
@@ -84,6 +86,9 @@ export default function LoginForm() {
                 type="submit"
                 onClick={() => console.log("button clicked")}
             >Login</button>
+
+            <p>{message}</p>
+
         </form>
     )
 }

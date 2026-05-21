@@ -13,6 +13,8 @@ export default function RegistrationForm() {
         password: ""
     });
 
+    const [message, setMessage] = useState("");
+
     const handleChange = (event: any) => {
 
         // we also add checked here if we expect or have any checkbox field
@@ -46,11 +48,11 @@ export default function RegistrationForm() {
             const data = await response.json();
 
             if (!response.ok) {
-                console.error(data.message);
+                setMessage(data.message);
                 return;
             }
 
-            console.log(data);
+            setMessage(data);
 
         } catch (error) {
 
@@ -114,6 +116,8 @@ export default function RegistrationForm() {
                 className={styles.button}
                 type="submit"
             > Register </button>
+
+            <p>{message}</p>
 
         </form>
     );
