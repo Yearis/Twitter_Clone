@@ -7,7 +7,6 @@ export const saveUser = async (user: User): Promise<string> => {
     const userDB = db.collection('users');
 
     const userData = {
-
         username: user.username,
         age: user.age,
         email: user.email,
@@ -20,4 +19,28 @@ export const saveUser = async (user: User): Promise<string> => {
     const userRef = await userDB.add(userData);
 
     return userRef.id;
+}
+
+// find user by email
+export const findUserByEmail = async (email: string): Promise<string> => {
+
+    const userDB = await db
+        .collection('users')
+        .where('email', '==', email)
+        .limit(1) // as email is unique
+        .get();
+
+    return userDB.docs[0].id;
+}
+
+// find user by username
+export const findUserByName = async (username: string): Promise<string> => {
+
+    const userDB = await db
+        .collection('users')
+        .where('username', '>=', username)
+        .where('username', '<=', username + '\uf8ff')
+        .get();
+
+    return userDB.docs[0].data().username;
 }
