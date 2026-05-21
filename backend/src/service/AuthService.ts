@@ -4,6 +4,9 @@ import {existsByEmail, existsByUsername, findUserByEmail, findUserByName, saveUs
 import bcrypt from 'bcryptjs';
 import {LoginUserDto} from "../dtos/LoginUserDto";
 import {generateToken} from "./JWTService";
+import { UserAlreadyExistsError } from "../error/user/UserAlreadyExistsError";
+import { UserNotFoundError } from "../error/user/UserNotFoundError";
+import { InvalidPasswordError } from "../error/user/InvalidPasswordError";
 
 export const registerUser = async (dto: RegisterUserDto): Promise<String> => {
 
@@ -43,5 +46,5 @@ export const loginUser = async (dto: LoginUserDto): Promise<string> => {
         throw new InvalidPasswordError("password is incorrect")
     }
 
-    return generateToken(dto.email);
+    return generateToken(user.email);
 }

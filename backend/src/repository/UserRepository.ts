@@ -22,7 +22,7 @@ export const saveUser = async (user: User): Promise<string> => {
 }
 
 // find user by email
-export const findUserByEmail = async (email: string): Promise<string> => {
+export const findUserByEmail = async (email: string): Promise<User | null> => {
 
     const userDB = await db
         .collection('users')
@@ -30,11 +30,18 @@ export const findUserByEmail = async (email: string): Promise<string> => {
         .limit(1) // as email is unique
         .get();
 
-    return userDB.docs[0].id;
+    if (userDB.empty) return null;
+
+    const doc = userDB.docs[0];
+
+    return {
+        id: doc.id,
+        ...doc.data()
+    } as User;
 }
 
 // find user by username
-export const findUserByName = async (username: string): Promise<string> => {
+export const findUserByName = async (username: string): Promise<User | null> => {
 
     const userDB = await db
         .collection('users')
@@ -42,5 +49,36 @@ export const findUserByName = async (username: string): Promise<string> => {
         .where('username', '<=', username + '\uf8ff')
         .get();
 
-    return userDB.docs[0].data().username;
+    if (userDB.empty) return null;
+
+    const doc = userDB.docs[0];
+
+    return {
+        id: doc.id,
+        ...doc.data()
+    } as User;
+}
+
+export const existsByEmail = async (email: string): Promise<boolean> => {
+
+    const userDB = await db
+        .collection('users')
+        .where('email', '==', email)
+        .limit(1) // as email is unique
+        .get();
+
+    // returns true if not empty else false
+    return !userDB.empty;
+}
+
+export const existsByUsername = async (username: string): Promise<boolean> => {
+
+    const userDB = await db
+        .collection('users')
+        .where('username', '==', username)
+        .limit(1)
+        .get();
+
+    // returns true if not empty else false
+    return !userDB.empty;
 }
