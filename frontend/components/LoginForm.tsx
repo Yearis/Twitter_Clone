@@ -28,7 +28,7 @@ export default function LoginForm() {
 
         try {
 
-            const response = await fetch("http://localhost:5000/api/login", {
+            const response = await fetch("https://twitter-clone-nine-kappa.vercel.app/api/login", {
                 method: "POST",
 
                 headers: {
