@@ -52,7 +52,7 @@ export default function RegistrationForm() {
                 return;
             }
 
-            setMessage(data);
+            setMessage(data.message);
 
         } catch (error) {
 
